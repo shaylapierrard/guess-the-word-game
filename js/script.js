@@ -62,7 +62,7 @@ const validateInput = function (input) {
 const makeGuess = function (guess) {
     guess = guess.toUpperCase();
     if (guessedLetters.includes(guess)) {
-        message.InnerText = "Oops, already used. Try again!";
+        message.innerText = "Oops, already used. Try again!";
     } else {
         guessedLetters.push(guess);
         console.log(guessedLetters)
@@ -98,26 +98,50 @@ const updateWordInProgress = function (guessedLetters) {
 const updateGuessesRemaining = function (guess) {
     const upperWord = word.toUpperCase();
     if (!upperWord.includes(guess)) {
-        message.innerText = "Sorry, there's no ${guess} in this word.";
-        remainingGuesses -=1;
+        message.innerText = `Sorry, there's no ${guess} in this word.`;
+        remainingGuesses -= 1;
     } else {
         message.innerText = `Yay! The word has the letter ${guess}.`;
     }
 
-    if (remainingGuesses ===0) {
+    if (remainingGuesses === 0) {
         message.innerHTML = `Game over! The word was <span class="highlight">${word}</span>.`;
-    } else if (remainingGuesses ===1) {
+    } else if (remainingGuesses === 1) {
         remainingNumSpan.innerText = `${remainingGuesses} guess`;
     } else {
         remainingNumSpan.innerText =`${remainingGuesses} guesses`;
     }
-    }
-    
-
+};
 
 const checkIfWin = function () {
     if (word.toUpperCase() === wordInProgress.innerText) {
         message.classList.add("win");
         message.innerHTML = `<p class="highlight">Congrats! You got it!</p>`;
+
+        startOver();
     }
-}
+};
+
+const startOver = function () {
+    guessLetterButton.classList.add("hide");
+    remainingNumParagraph.classList.add("hide");
+    lettersGuessedArea.classList.add("hide");
+    playAgainButton.classList.remove("hide");
+};
+
+playAgainButton.addEventListener("click", function() {
+    message.classList.remove("win");
+    guessedLetters = [];
+    remainingGuesses = 8;
+    remainingNumSpan.innerText = `${remainingGuesses} guesses`;
+    guessedNumParagraph.innerHTML = "";
+    message.innerText = "";
+
+    getWord();
+
+    guessLetterButton.classList.remove("hide");
+    playAgainButton.classList.add("hide");
+    remainingNumParagraph.classList.remove("hide");
+    lettersGuessedArea.classList.remove("hide");
+
+});
